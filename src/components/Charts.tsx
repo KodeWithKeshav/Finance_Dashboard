@@ -195,6 +195,7 @@ export function BalanceTrendChart() {
 }
 
 export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
+  const PieAny = Pie as any;
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const top6 = categorySpending.slice(0, 5);
@@ -234,7 +235,7 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
                   {formatCurrency(totalAmount)}
                 </tspan>
               </text>
-              <Pie
+              <PieAny
                 data={data}
                 cx="50%"
                 cy="50%"
@@ -248,10 +249,10 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
                 onMouseEnter={onPieEnter}
                 onMouseLeave={onPieLeave}
               >
-                {data.map((entry, index) => (
+                {data.map((entry: any, index: number) => (
                   <Cell key={index} fill={entry.fill} />
                 ))}
-              </Pie>
+              </PieAny>
               <Tooltip content={<PieTooltip />} />
             </PieChart>
           </ResponsiveContainer>
