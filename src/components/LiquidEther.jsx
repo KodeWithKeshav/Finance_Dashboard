@@ -1019,33 +1019,8 @@ export default function LiquidEther({
       autoRampDuration
     });
     webglRef.current = webgl;
-
-    const applyOptionsFromProps = () => {
-      if (!webglRef.current) return;
-      const sim = webglRef.current.output?.simulation;
-      if (!sim) return;
-      const prevRes = sim.options.resolution;
-      Object.assign(sim.options, {
-        mouse_force: mouseForce,
-        cursor_size: cursorSize,
-        isViscous,
-        viscous,
-        iterations_viscous: iterationsViscous,
-        iterations_poisson: iterationsPoisson,
-        dt,
-        BFECC,
-        resolution,
-        isBounce
-      });
-      if (resolution !== prevRes) {
-        sim.resize();
-      }
-    };
-    applyOptionsFromProps();
-
-    webgl.start();
-
-    // IntersectionObserver to pause rendering when not visible
+    
+    // IntersectionObserver to pause rendering when not visible or hidden
     const io = new IntersectionObserver(
       entries => {
         const entry = entries[0];
@@ -1074,7 +1049,40 @@ export default function LiquidEther({
     ro.observe(container);
     resizeObserverRef.current = ro;
 
+    const applyOptionsFromProps = () => {
+      if (!webglRef.current) return;
+      const sim = webglRef.current.output?.simulation;
+      if (!sim) return;
+      const prevRes = sim.options.resolution;
+      Object.assign(sim.options, {
+        mouse_force: mouseForce,
+        cursor_size: cursorSize,
+        isViscous,
+        viscous,
+        iterations_viscous: iterationsViscous,
+        iterations_poisson: iterationsPoisson,
+        dt,
+        BFECC,
+        resolution,
+        isBounce
+      });
+      if (resolution !== prevRes) {
+        sim.resize();
+      }
+    };
+    applyOptionsFromProps();
+
+    const onVisChange = () => {
+       if (document.hidden) {
+         webglRef.current?.pause();
+       } else if (isVisibleRef.current) {
+         webglRef.current?.start();
+       }
+    };
+    document.addEventListener('visibilitychange', onVisChange);
+
     return () => {
+      document.removeEventListener('visibilitychange', onVisChange);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) {
         try {

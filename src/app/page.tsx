@@ -77,12 +77,12 @@ export default function Home() {
         <LiquidEther
           colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#8062FF', '#FFB7FD', '#C5B7FA']}
           mouseForce={20}
-          cursorSize={100}
+          cursorSize={80}
           isViscous={true}
           viscous={30}
-          iterationsViscous={32}
-          iterationsPoisson={32}
-          resolution={0.5}
+          iterationsViscous={8}
+          iterationsPoisson={8}
+          resolution={0.15}
           isBounce={false}
           autoDemo={true}
           autoSpeed={0.5}
