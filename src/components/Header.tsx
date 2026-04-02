@@ -124,9 +124,9 @@ export default function Header() {
           justify-content: space-between;
           padding: 16px 32px;
           border-bottom: 1px solid var(--border-primary);
-          background: color-mix(in srgb, var(--bg-primary), transparent 10%);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
+          background: color-mix(in srgb, var(--bg-primary), transparent 60%);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
           position: sticky;
           top: 0;
           z-index: 50;
@@ -161,7 +161,9 @@ export default function Header() {
           display: flex;
           align-items: center;
           padding: 4px;
-          background: var(--bg-secondary);
+          background: color-mix(in srgb, var(--bg-secondary), transparent 40%);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           border: 1px solid var(--border-primary);
           border-radius: 100px;
           gap: 4px;
@@ -195,7 +197,9 @@ export default function Header() {
         .nav-active-bg {
           position: absolute;
           inset: 0;
-          background: var(--bg-primary);
+          background: color-mix(in srgb, var(--bg-primary), transparent 30%);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           border-radius: 100px;
           box-shadow: 0 2px 4px rgba(0,0,0,0.05), border 1px solid var(--border-primary);
           z-index: 1;
@@ -211,7 +215,9 @@ export default function Header() {
 
         .role-switcher {
           display: flex;
-          background: var(--bg-tertiary);
+          background: color-mix(in srgb, var(--bg-tertiary), transparent 40%);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           border-radius: var(--radius-sm);
           padding: 2px;
         }
