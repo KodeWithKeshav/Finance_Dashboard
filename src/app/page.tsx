@@ -71,11 +71,11 @@ export default function Home() {
           height: '100vh', 
           zIndex: 0, 
           pointerEvents: 'none',
-          opacity: theme === 'dark' ? 0.35 : 0.15 
+          opacity: theme === 'dark' ? 0.35 : 0.12 
         }}
       >
         <LiquidEther
-          colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#8062FF', '#FFB7FD', '#C5B7FA']}
+          colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#FFB703', '#FB8500', '#FFD166']}
           mouseForce={20}
           cursorSize={80}
           isViscous={true}
@@ -93,7 +93,7 @@ export default function Home() {
         />
       </div>
 
-      <Sidebar activePage={activePage} onPageChange={setActivePage} isOpen={sidebarOpen} />
+
 
       <main className="main-content">
         <Header />
