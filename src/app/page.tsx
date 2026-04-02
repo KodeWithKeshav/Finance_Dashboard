@@ -11,6 +11,7 @@ import TransactionTable from '@/components/TransactionTable';
 import InsightsPanel from '@/components/InsightsPanel';
 import { useStore, getSummaryStats, getCategorySpending } from '@/store/useStore';
 import LiquidEther from '@/components/LiquidEther';
+import ClickSpark from '@/components/ClickSpark';
 
 const pageVariants: Variants = {
   initial: { opacity: 0, y: 12 },
@@ -60,7 +61,14 @@ export default function Home() {
   );
 
   return (
-    <div className={`dashboard-layout ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+    <ClickSpark
+      sparkColor={theme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.5)'}
+      sparkSize={6}
+      sparkRadius={15}
+      sparkCount={8}
+      duration={400}
+    >
+      <div className={`dashboard-layout ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
       {/* Background Effect layer */}
       <div 
         style={{ 
@@ -202,6 +210,7 @@ export default function Home() {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </ClickSpark>
   );
 }
