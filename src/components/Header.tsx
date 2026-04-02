@@ -1,0 +1,348 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { useStore } from '@/store/useStore';
+import { SunIcon, MoonIcon, EyeIcon, ShieldCheckIcon, Squares2X2Icon, ListBulletIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
+import ShinyText from './ShinyText';
+
+const navItems = [
+  { id: 'dashboard' as const, label: 'Overview', icon: Squares2X2Icon },
+  { id: 'transactions' as const, label: 'Transactions', icon: ListBulletIcon },
+  { id: 'insights' as const, label: 'Analytics', icon: ChartBarIcon },
+];
+
+export default function Header() {
+  const { role, setRole, theme, toggleTheme, activePage, setActivePage } = useStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return (
+    <header className="header">
+      <div className="header-left">
+        <div className="logo-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 12L12 8L16 12M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <ShinyText 
+          text="FinanceFlow" 
+          speed={3} 
+          color="var(--text-tertiary)" 
+          shineColor="var(--text-primary)" 
+          spread={100}
+          className="brand-name mono" 
+        />
+      </div>
+
+      {/* Main Navigation Pill in the Center */}
+      <nav className="header-nav">
+        {navItems.map((item) => {
+          const isActive = activePage === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActivePage(item.id)}
+              className={`nav-btn ${isActive ? 'active' : ''}`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="header-nav-glow"
+                  className="nav-active-bg"
+                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                />
+              )}
+              <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <item.icon style={{ width: 14, height: 14 }} strokeWidth={isActive ? 2.5 : 1.5} />
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
+
+      <div className="header-right">
+        {/* Role Switcher */}
+        <div className="role-switcher">
+          <button
+            className={`role-btn ${role === 'viewer' ? 'active' : ''}`}
+            onClick={() => setRole('viewer')}
+          >
+            <EyeIcon style={{ width: 14, height: 14, marginRight: 4 }} />
+            Viewer
+          </button>
+          <button
+            className={`role-btn ${role === 'admin' ? 'active' : ''}`}
+            onClick={() => setRole('admin')}
+          >
+            <ShieldCheckIcon style={{ width: 14, height: 14, marginRight: 4 }} />
+            Admin
+          </button>
+        </div>
+
+        <div className="divider" />
+
+        {/* Celestial Eclipse Theme Toggle */}
+        {mounted && (
+          <button 
+            className="eclipse-toggle"
+            onClick={toggleTheme}
+            title="Toggle Theme"
+          >
+            <div className={`eclipse-sky ${theme}`}>
+              <div className="stars">
+                <span className="star s1" />
+                <span className="star s2" />
+                <span className="star s3" />
+              </div>
+              
+              <div className="eclipse-sun" />
+              
+              <motion.div 
+                className="eclipse-moon"
+                initial={false}
+                animate={{
+                  x: theme === 'dark' ? 6 : 40,
+                  y: theme === 'dark' ? -6 : -20,
+                  scale: theme === 'dark' ? 1 : 0.5
+                }}
+                transition={{ type: "spring", stiffness: 80, damping: 15 }}
+              />
+            </div>
+          </button>
+        )}
+      </div>
+
+      <style jsx>{`
+        .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px 32px;
+          border-bottom: 1px solid var(--border-primary);
+          background: color-mix(in srgb, var(--bg-primary), transparent 10%);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          position: sticky;
+          top: 0;
+          z-index: 50;
+        }
+
+        .header-left {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex: 1;
+        }
+
+        .logo-box {
+          width: 32px;
+          height: 32px;
+          border-radius: var(--radius-sm);
+          background: var(--text-primary);
+          color: var(--bg-primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .brand-name {
+          font-size: 1rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          color: var(--text-primary);
+        }
+
+        .header-nav {
+          display: flex;
+          align-items: center;
+          padding: 4px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-primary);
+          border-radius: 100px;
+          gap: 4px;
+        }
+
+        .nav-btn {
+          position: relative;
+          padding: 6px 16px;
+          background: transparent;
+          border: none;
+          color: var(--text-tertiary);
+          font-family: inherit;
+          font-size: 0.75rem;
+          font-weight: 500;
+          line-height: 1;
+          letter-spacing: 0.02em;
+          border-radius: 100px;
+          cursor: pointer;
+          transition: color 0.15s ease;
+        }
+
+        .nav-btn:hover {
+          color: var(--text-secondary);
+        }
+
+        .nav-btn.active {
+          color: var(--text-primary);
+          font-weight: 600;
+        }
+
+        .nav-active-bg {
+          position: absolute;
+          inset: 0;
+          background: var(--bg-primary);
+          border-radius: 100px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05), border 1px solid var(--border-primary);
+          z-index: 1;
+        }
+
+        .header-right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          flex: 1;
+          justify-content: flex-end;
+        }
+
+        .role-switcher {
+          display: flex;
+          background: var(--bg-tertiary);
+          border-radius: var(--radius-sm);
+          padding: 2px;
+        }
+
+        .role-btn {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 12px;
+          border: none;
+          border-radius: calc(var(--radius-sm) - 2px);
+          background: transparent;
+          color: var(--text-secondary);
+          font-size: 0.75rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          font-family: inherit;
+        }
+
+        .role-btn.active {
+          background: var(--bg-primary);
+          color: var(--text-primary);
+          box-shadow: var(--shadow-sm);
+          font-weight: 600;
+        }
+
+        .divider {
+          width: 1px;
+          height: 24px;
+          background: var(--border-primary);
+        }
+
+        /* Celestial Eclipse Toggle */
+        .eclipse-toggle {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          border: 1px solid var(--border-primary);
+          padding: 0;
+          cursor: pointer;
+          background: transparent;
+          outline: none;
+          overflow: hidden;
+          position: relative;
+          box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .eclipse-sky {
+          position: absolute;
+          inset: 0;
+          transition: background 0.6s ease;
+        }
+
+        .eclipse-sky.light { background: #38bdf8; }
+        .eclipse-sky.dark { background: #0f172a; }
+
+        .eclipse-sun {
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #fde047;
+          top: 11px;
+          left: 11px;
+          box-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+          transition: transform 0.5s ease;
+        }
+
+        .eclipse-sky.dark .eclipse-sun {
+          transform: scale(0.9);
+          background: #e2e8f0; /* turns paler like the moon */
+          box-shadow: 0 0 15px rgba(226, 232, 240, 0.4);
+        }
+
+        .eclipse-moon {
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #0f172a; /* Exaxtly matches the dark night sky */
+          top: 11px;
+          left: 11px;
+          z-index: 2;
+        }
+
+        .stars {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transition: opacity 0.8s ease;
+        }
+
+        .eclipse-sky.dark .stars { opacity: 1; }
+
+        .star {
+          position: absolute;
+          background: #ffffff;
+          border-radius: 50%;
+          box-shadow: 0 0 3px #ffffff;
+        }
+        
+        .star.s1 { width: 2px; height: 2px; top: 12px; left: 10px; animation: twinkle 2s infinite; }
+        .star.s2 { width: 1.5px; height: 1.5px; top: 20px; left: 32px; animation: twinkle 3s infinite 1s; }
+        .star.s3 { width: 2px; height: 2px; top: 30px; left: 20px; animation: twinkle 2.5s infinite 0.5s; }
+
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.2; transform: scale(0.8); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @media (max-width: 900px) {
+          .header-left .brand-name {
+            display: none;
+          }
+          .header-nav {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            padding: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px var(--border-primary);
+            background: var(--bg-primary);
+          }
+          .nav-btn {
+            padding: 10px 20px;
+          }
+        }
+      `}</style>
+    </header>
+  );
+}
