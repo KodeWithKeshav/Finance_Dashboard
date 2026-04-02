@@ -71,11 +71,11 @@ export default function Home() {
           height: '100vh', 
           zIndex: 0, 
           pointerEvents: 'none',
-          opacity: theme === 'dark' ? 0.35 : 0.12 
+          opacity: theme === 'dark' ? 0.35 : 0.25
         }}
       >
         <LiquidEther
-          colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#FFB703', '#FB8500', '#FFD166']}
+          colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#E4E4E7', '#F4F4F5', '#D4D4D8']}
           mouseForce={20}
           cursorSize={80}
           isViscous={true}
