@@ -177,24 +177,27 @@ export default function Home() {
           min-width: 0;
         }
         .page-content {
-          padding: 28px 32px 40px;
+          padding: 28px 56px 64px;
           max-width: 1440px;
           margin: 0 auto;
         }
         .charts-grid-main {
           display: grid;
           grid-template-columns: 1.4fr 1fr;
-          gap: 20px;
+          gap: 24px;
           margin-top: 24px;
         }
         .charts-grid-bottom {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 20px;
+          gap: 24px;
           margin-top: 24px;
         }
 
         @media (max-width: 900px) {
+          .page-content {
+            padding: 24px 32px 48px;
+          }
           .charts-grid-main,
           .charts-grid-bottom {
             grid-template-columns: 1fr;
@@ -206,7 +209,7 @@ export default function Home() {
             padding-bottom: 88px; /* space for bottom floating dock */
           }
           .page-content {
-            padding: 20px 16px 32px;
+            padding: 20px 24px 32px;
           }
         }
       `}</style>
@@ -214,3 +217,4 @@ export default function Home() {
     </ClickSpark>
   );
 }
+
