@@ -12,6 +12,7 @@ import InsightsPanel from '@/components/InsightsPanel';
 import { useStore, getSummaryStats, getCategorySpending } from '@/store/useStore';
 import LiquidEther from '@/components/LiquidEther';
 import ClickSpark from '@/components/ClickSpark';
+import QuickInsightsStrip from '@/components/QuickInsightsStrip';
 
 const pageVariants: Variants = {
   initial: { opacity: 0, y: 12 },
@@ -123,6 +124,12 @@ export default function Home() {
                 totalExpenses={stats.totalExpenses}
                 savingsRate={stats.savingsRate}
                 transactionCount={stats.transactionCount}
+                topCategory={categorySpending.length > 0 ? categorySpending[0] : null}
+              />
+
+              <QuickInsightsStrip 
+                transactions={transactions} 
+                categorySpending={categorySpending} 
               />
 
               <div className="charts-grid-main">

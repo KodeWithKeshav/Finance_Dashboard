@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/utils/helpers';
-import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ScaleIcon } from '@heroicons/react/24/outline';
+import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ScaleIcon, ChartBarSquareIcon } from '@heroicons/react/24/outline';
 import GlowCard from './GlowCard';
 
 interface StatCardsProps {
@@ -11,6 +11,7 @@ interface StatCardsProps {
   totalExpenses: number;
   savingsRate: number;
   transactionCount: number;
+  topCategory?: { category: string; amount: number; percentage: number; } | null;
 }
 
 const container = {
@@ -32,6 +33,7 @@ export default function StatCards({
   totalExpenses,
   savingsRate,
   transactionCount,
+  topCategory,
 }: StatCardsProps) {
   const stats = [
     {
@@ -61,6 +63,13 @@ export default function StatCards({
       change: `${transactionCount} txns`,
       changeType: 'neutral' as const,
       icon: <ScaleIcon className="w-5 h-5" />,
+    },
+    {
+      label: 'Top Expense',
+      value: topCategory ? topCategory.category : 'N/A',
+      change: topCategory ? `${formatCurrency(topCategory.amount)} (${Math.round(topCategory.percentage)}%)` : '-',
+      changeType: 'neutral' as const,
+      icon: <ChartBarSquareIcon className="w-5 h-5" />,
     },
   ];
 

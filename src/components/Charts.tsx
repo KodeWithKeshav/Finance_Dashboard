@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   AreaChart,
@@ -14,6 +15,7 @@ import {
   Cell,
   BarChart,
   Bar,
+  Sector,
 } from 'recharts';
 import { monthlyData, categoryColors } from '@/data/mockData';
 import { formatCurrency } from '@/utils/helpers';
@@ -32,15 +34,18 @@ interface ChartsProps {
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
+    const data = payload[0].payload;
     return (
       <div className="custom-tooltip">
         <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: 8, fontSize: '0.875rem' }}>{label}</p>
-        {payload.map((entry: any, index: number) => (
-          <p key={index} style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 2 }}>
-            <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', backgroundColor: entry.color, marginRight: 6 }} />
-            {entry.name}: <span className="mono">{formatCurrency(entry.value)}</span>
-          </p>
-        ))}
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 2 }}>
+          <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--text-primary)', marginRight: 6 }} />
+          Income: <span className="mono">{formatCurrency(data.income)}</span>
+        </p>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 2 }}>
+          <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--border-secondary)', marginRight: 6 }} />
+          Expenses: <span className="mono">{formatCurrency(data.expense)}</span>
+        </p>
       </div>
     );
   }
@@ -49,11 +54,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const PieTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
+    const data = payload[0].payload;
     return (
       <div className="custom-tooltip">
         <p style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: '0.875rem' }}>{payload[0].name}</p>
         <p className="mono" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: 4 }}>
-          {formatCurrency(payload[0].value)}
+          {formatCurrency(payload[0].value)} ({data.percentage}%)
         </p>
       </div>
     );
@@ -61,7 +67,47 @@ const PieTooltip = ({ active, payload }: any) => {
   return null;
 };
 
+const renderActiveShape = (props: any) => {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 6}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+    </g>
+  );
+};
+
 export function BalanceTrendChart() {
+  const [activeRange, setActiveRange] = useState('6M');
+
+  let dataToUse = monthlyData;
+  if (activeRange === '1M') dataToUse = monthlyData.slice(-2);
+  if (activeRange === '3M') dataToUse = monthlyData.slice(-3);
+  if (activeRange === '6M') dataToUse = monthlyData.slice(-6);
+  if (activeRange === '1Y') dataToUse = monthlyData.slice(-12);
+
+  const combinedData = dataToUse.map((d, i) => {
+    const isLast = i === dataToUse.length - 1;
+    const isSecondLast = i === dataToUse.length - 2;
+
+    return {
+      month: d.month,
+      histIncome: isLast ? null : d.income,
+      histExpense: isLast ? null : d.expense,
+      projIncome: (isLast || isSecondLast) ? d.income : null,
+      projExpense: (isLast || isSecondLast) ? d.expense : null,
+      income: d.income,
+      expense: d.expense,
+    };
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -69,23 +115,55 @@ export function BalanceTrendChart() {
       transition={{ delay: 0.1 }}
     >
      <GlowCard style={{ padding: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
         <div>
           <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>Flow Overview</h3>
         </div>
-        <div style={{ display: 'flex', gap: 16, fontSize: '0.75rem' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)' }}>
-            <span style={{ width: 8, height: 2, background: 'var(--text-primary)', display: 'inline-block' }} />
-            Income
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)' }}>
-            <span style={{ width: 8, height: 2, background: 'var(--border-secondary)', display: 'inline-block' }} />
-            Expenses
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div style={{ display: 'flex', background: 'var(--bg-tertiary)', borderRadius: 6, padding: 2 }}>
+            {['1M', '3M', '6M', '1Y'].map(range => (
+              <button 
+                key={range} 
+                onClick={() => setActiveRange(range)}
+                style={{ 
+                  padding: '4px 12px', 
+                  fontSize: '0.75rem', 
+                  fontWeight: 500,
+                  color: activeRange === range ? 'var(--bg-primary)' : 'var(--text-tertiary)',
+                  background: activeRange === range ? 'var(--text-primary)' : 'transparent',
+                  borderRadius: 4,
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}>
+                {range}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 16, fontSize: '0.75rem' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)' }}>
+              <span style={{ width: 8, height: 2, background: 'var(--text-primary)', display: 'inline-block' }} />
+              Income
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)' }}>
+              <span style={{ width: 8, height: 2, background: 'var(--border-secondary)', display: 'inline-block' }} />
+              Expenses
+            </span>
+          </div>
         </div>
       </div>
       <ResponsiveContainer width="100%" height={260}>
-        <AreaChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+        <AreaChart data={combinedData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+          <defs>
+            <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="var(--text-primary)" stopOpacity={0.15}/>
+              <stop offset="95%" stopColor="var(--text-primary)" stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="var(--border-secondary)" stopOpacity={0.25}/>
+              <stop offset="95%" stopColor="var(--border-secondary)" stopOpacity={0}/>
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-primary)" vertical={false} />
           <XAxis
             dataKey="month"
@@ -102,24 +180,10 @@ export function BalanceTrendChart() {
             dx={-10}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Area
-            type="monotone"
-            dataKey="income"
-            name="Income"
-            stroke="var(--text-primary)"
-            strokeWidth={1.5}
-            fill="transparent"
-            activeDot={{ fill: 'var(--bg-primary)', stroke: 'var(--text-primary)', strokeWidth: 2, r: 4 }}
-          />
-          <Area
-            type="monotone"
-            dataKey="expense"
-            name="Expenses"
-            stroke="var(--border-secondary)"
-            strokeWidth={1.5}
-            fill="transparent"
-            activeDot={{ fill: 'var(--bg-primary)', stroke: 'var(--border-secondary)', strokeWidth: 2, r: 4 }}
-          />
+          <Area type="monotone" dataKey="histIncome" stroke="var(--text-primary)" strokeWidth={1.5} fillOpacity={1} fill="url(#colorIncome)" connectNulls={false} activeDot={{ fill: 'var(--bg-primary)', stroke: 'var(--text-primary)', strokeWidth: 2, r: 4 }} />
+          <Area type="monotone" dataKey="projIncome" stroke="var(--text-primary)" strokeWidth={1.5} strokeDasharray="5 5" fillOpacity={0.5} fill="url(#colorIncome)" connectNulls={false} activeDot={{ fill: 'var(--bg-primary)', stroke: 'var(--text-primary)', strokeWidth: 2, r: 4 }} />
+          <Area type="monotone" dataKey="histExpense" stroke="var(--border-secondary)" strokeWidth={1.5} fillOpacity={1} fill="url(#colorExpense)" connectNulls={false} activeDot={{ fill: 'var(--bg-primary)', stroke: 'var(--border-secondary)', strokeWidth: 2, r: 4 }} />
+          <Area type="monotone" dataKey="projExpense" stroke="var(--border-secondary)" strokeWidth={1.5} strokeDasharray="5 5" fillOpacity={0.5} fill="url(#colorExpense)" connectNulls={false} activeDot={{ fill: 'var(--bg-primary)', stroke: 'var(--border-secondary)', strokeWidth: 2, r: 4 }} />
         </AreaChart>
       </ResponsiveContainer>
      </GlowCard>
@@ -128,11 +192,22 @@ export function BalanceTrendChart() {
 }
 
 export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
+  const [activeIndex, setActiveIndex] = useState(-1);
+
   const top6 = categorySpending.slice(0, 5);
   const data = top6.map((item) => ({
     ...item,
     fill: categoryColors[item.category] || 'var(--border-secondary)',
   }));
+
+  const totalAmount = categorySpending.reduce((sum, item) => sum + item.amount, 0);
+
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+  const onPieLeave = () => {
+    setActiveIndex(-1);
+  };
 
   return (
     <motion.div
@@ -150,6 +225,12 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
         <div style={{ height: 160 }}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
+              <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle">
+                <tspan x="50%" dy="-8" fontSize="0.75rem" fill="var(--text-tertiary)">Total Spend</tspan>
+                <tspan x="50%" dy="16" fontSize="1rem" fontWeight="600" className="mono" fill="var(--text-primary)">
+                  {formatCurrency(totalAmount)}
+                </tspan>
+              </text>
               <Pie
                 data={data}
                 cx="50%"
@@ -159,6 +240,10 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
                 paddingAngle={2}
                 dataKey="amount"
                 strokeWidth={0}
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape}
+                onMouseEnter={onPieEnter}
+                onMouseLeave={onPieLeave}
               >
                 {data.map((entry, index) => (
                   <Cell key={index} fill={entry.fill} />
@@ -168,7 +253,7 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {data.map((item) => (
             <div
               key={item.category}
@@ -178,18 +263,29 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
                 gap: 8,
                 fontSize: '0.75rem',
               }}
+              onMouseEnter={() => {
+                const index = data.findIndex(d => d.category === item.category);
+                if(index !== -1) setActiveIndex(index);
+              }}
+              onMouseLeave={() => setActiveIndex(-1)}
             >
               <span
                 style={{
-                  width: 6,
-                  height: 6,
+                  width: 8,
+                  height: 8,
                   borderRadius: '50%',
                   background: item.fill,
                   flexShrink: 0,
+                  transition: 'transform 0.2s',
+                  transform: activeIndex !== -1 && data[activeIndex]?.category === item.category ? 'scale(1.5)' : 'scale(1)'
                 }}
               />
-              <span style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {item.category}
+              <span style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', gap: '4px' }}>
+                <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{item.category}</span>
+                <span>&middot;</span>
+                <span className="mono">{formatCurrency(item.amount)}</span>
+                <span>&middot;</span>
+                <span>{Math.round(item.percentage)}%</span>
               </span>
             </div>
           ))}
