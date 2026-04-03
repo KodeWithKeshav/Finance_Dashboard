@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/utils/helpers';
 import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ScaleIcon } from '@heroicons/react/24/outline';
+import GlowCard from './GlowCard';
 
 interface StatCardsProps {
   totalBalance: number;
@@ -71,21 +72,23 @@ export default function StatCards({
       animate="show"
     >
       {stats.map((stat) => (
-        <motion.div key={stat.label} variants={item} className="panel-card stat-card">
-          <div className="stat-header">
-            <span className="stat-label">{stat.label}</span>
-            <div className="stat-icon">
-              {stat.icon}
+        <motion.div key={stat.label} variants={item}>
+          <GlowCard style={{ padding: 24 }}>
+            <div className="stat-header">
+              <span className="stat-label">{stat.label}</span>
+              <div className="stat-icon">
+                {stat.icon}
+              </div>
             </div>
-          </div>
-          <div className="stat-body">
-            <p className="stat-value mono">{stat.value}</p>
-            <span className={`stat-change ${stat.changeType}`}>
-              {stat.changeType === 'positive' && '+'}
-              {stat.changeType === 'negative' && ''}
-              {stat.change}
-            </span>
-          </div>
+            <div className="stat-body">
+              <p className="stat-value mono">{stat.value}</p>
+              <span className={`stat-change ${stat.changeType}`}>
+                {stat.changeType === 'positive' && '+'}
+                {stat.changeType === 'negative' && ''}
+                {stat.change}
+              </span>
+            </div>
+          </GlowCard>
 
           <style jsx>{`
             .stat-header {

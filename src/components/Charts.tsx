@@ -18,6 +18,7 @@ import {
 import { monthlyData, categoryColors } from '@/data/mockData';
 import { formatCurrency } from '@/utils/helpers';
 import { CategoryIcon } from './IconResolver';
+import GlowCard from './GlowCard';
 
 interface SpendingData {
   category: string;
@@ -66,9 +67,8 @@ export function BalanceTrendChart() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="panel-card"
-      style={{ padding: '24px' }}
     >
+     <GlowCard style={{ padding: '24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
           <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>Flow Overview</h3>
@@ -122,6 +122,7 @@ export function BalanceTrendChart() {
           />
         </AreaChart>
       </ResponsiveContainer>
+     </GlowCard>
     </motion.div>
   );
 }
@@ -138,9 +139,8 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className="panel-card"
-      style={{ padding: '24px' }}
     >
+     <GlowCard style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
           Distribution
@@ -195,6 +195,7 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
           ))}
         </div>
       </div>
+     </GlowCard>
     </motion.div>
   );
 }
@@ -205,9 +206,8 @@ export function IncomeExpenseBarChart() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="panel-card"
-      style={{ padding: '24px' }}
     >
+     <GlowCard style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
           Monthly Comparison
@@ -235,6 +235,7 @@ export function IncomeExpenseBarChart() {
           <Bar dataKey="expense" name="Expenses" fill="var(--border-secondary)" radius={[2, 2, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
+     </GlowCard>
     </motion.div>
   );
 }

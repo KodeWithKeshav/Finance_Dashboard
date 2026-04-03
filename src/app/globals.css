@@ -354,7 +354,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: background 0.1s;
 }
 .data-table tbody tr:hover {
-  background: var(--bg-secondary);
+  background: color-mix(in srgb, var(--text-primary), transparent 95%);
 }
 
 /* Helper */

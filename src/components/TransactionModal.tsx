@@ -13,7 +13,7 @@ const categories: Category[] = [
 ];
 
 export default function TransactionModal() {
-  const { isModalOpen, editingTransaction, closeModal, addTransaction, editTransaction } = useStore();
+  const { modalOpen, editingTransaction, closeModal, addTransaction, editTransaction } = useStore();
 
   const [formData, setFormData] = useState<Partial<Transaction>>({
     description: '',
@@ -40,9 +40,9 @@ export default function TransactionModal() {
       });
     }
     setErrors({});
-  }, [editingTransaction, isModalOpen]);
+  }, [editingTransaction, modalOpen]);
 
-  if (!isModalOpen) return null;
+  if (!modalOpen) return null;
 
   const validate = () => {
     const newErrors: Record<string, string> = {};

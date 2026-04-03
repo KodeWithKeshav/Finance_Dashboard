@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { formatCurrency, formatDate, getRelativeDate } from '@/utils/helpers';
 import { Transaction } from '@/types';
 import { CategoryIcon } from './IconResolver';
+import GlowCard from './GlowCard';
 
 interface RecentTransactionsProps {
   transactions: Transaction[];
@@ -17,9 +18,8 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.25 }}
-      className="panel-card"
-      style={{ padding: 24, display: 'flex', flexDirection: 'column' }}
     >
+     <GlowCard style={{ padding: 24, display: 'flex', flexDirection: 'column', minHeight: 'inherit' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
           Recent Activity
@@ -93,6 +93,7 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
           ))}
         </div>
       )}
+     </GlowCard>
     </motion.div>
   );
 }

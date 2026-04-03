@@ -8,6 +8,7 @@ import { useExport } from '@/hooks/useExport';
 import TransactionModal from './TransactionModal';
 import { Category, TransactionType } from '@/types';
 import { CategoryIcon } from './IconResolver';
+import GlowCard from './GlowCard';
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -37,9 +38,9 @@ export default function TransactionTable() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="panel-card"
-        style={{ padding: '20px 24px', marginBottom: 20 }}
+        style={{ marginBottom: 20 }}
       >
+       <GlowCard style={{ padding: '20px 24px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
           <div style={{ flex: '1 1 240px', position: 'relative' }}>
             <MagnifyingGlassIcon style={{ position: 'absolute', left: 12, top: 10, color: 'var(--text-tertiary)', width: 16, height: 16, minWidth: 16 }} />
@@ -171,15 +172,15 @@ export default function TransactionTable() {
         <div style={{ marginTop: 12, fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
           Showing {filteredTransactions.length} of {transactions.length} records
         </div>
+       </GlowCard>
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="panel-card"
-        style={{ overflow: 'hidden' }}
       >
+       <GlowCard style={{ overflow: 'hidden' }}>
         {filteredTransactions.length === 0 ? (
           <div style={{ padding: 60, textAlign: 'center' }}>
             <FunnelIcon style={{ width: 48, height: 48, margin: '0 auto 16px', color: 'var(--text-tertiary)' }} />
@@ -280,6 +281,7 @@ export default function TransactionTable() {
             </table>
           </div>
         )}
+       </GlowCard>
       </motion.div>
 
       <TransactionModal />

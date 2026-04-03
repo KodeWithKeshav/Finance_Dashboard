@@ -6,6 +6,7 @@ import { formatCurrency, formatDate } from '@/utils/helpers';
 import { categoryColors } from '@/data/mockData';
 import { CategoryIcon } from './IconResolver';
 import { ChartBarSquareIcon, WalletIcon, CurrencyDollarIcon, TagIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, CheckBadgeIcon, ScaleIcon } from '@heroicons/react/24/outline';
+import GlowCard from './GlowCard';
 
 const container = {
   hidden: { opacity: 0 },
@@ -90,75 +91,83 @@ export default function InsightsPanel() {
           { label: 'Avg Income', value: formatCurrency(avgIncome), icon: <CurrencyDollarIcon className="w-5 h-5" /> },
           { label: 'Categories Used', value: uniqueCategories, icon: <TagIcon className="w-5 h-5" /> },
         ].map((m, i) => (
-          <motion.div key={i} variants={item} className="panel-card" style={{ padding: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>{m.label}</span>
-              <span style={{ color: 'var(--text-tertiary)' }}>{m.icon}</span>
-            </div>
-            <div className="mono" style={{ fontSize: '1.25rem', fontWeight: 600 }}>{m.value}</div>
+          <motion.div key={i} variants={item}>
+            <GlowCard style={{ padding: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>{m.label}</span>
+                <span style={{ color: 'var(--text-tertiary)' }}>{m.icon}</span>
+              </div>
+              <div className="mono" style={{ fontSize: '1.25rem', fontWeight: 600 }}>{m.value}</div>
+            </GlowCard>
           </motion.div>
         ))}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16, marginBottom: 28 }}>
         {insights.map((insight, i) => (
-          <motion.div key={i} variants={item} className="panel-card" style={{ padding: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', flexShrink: 0 }}>
-                {insight.icon}
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                  <h3 style={{ fontSize: '0.875rem', fontWeight: 600 }}>{insight.title}</h3>
-                  <span className="mono" style={{ fontSize: '0.875rem', fontWeight: 600 }}>{insight.highlight}</span>
+          <motion.div key={i} variants={item}>
+            <GlowCard style={{ padding: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', flexShrink: 0 }}>
+                  {insight.icon}
                 </div>
-                <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>{insight.description}</p>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <h3 style={{ fontSize: '0.875rem', fontWeight: 600 }}>{insight.title}</h3>
+                    <span className="mono" style={{ fontSize: '0.875rem', fontWeight: 600 }}>{insight.highlight}</span>
+                  </div>
+                  <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>{insight.description}</p>
+                </div>
               </div>
-            </div>
+            </GlowCard>
           </motion.div>
         ))}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
-        <motion.div variants={item} className="panel-card" style={{ padding: 24 }}>
-          <h3 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: 20 }}>Top Expenses</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {expenses.slice(0, 5).map((t, i) => (
-              <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 12, borderBottom: i < 4 ? '1px solid var(--border-primary)' : 'none' }}>
-                <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>0{i + 1}</span>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: '0.875rem', fontWeight: 500 }}>{t.description}</p>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{formatDate(t.date)}</p>
+        <motion.div variants={item}>
+          <GlowCard style={{ padding: 24, display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <h3 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: 20 }}>Top Expenses</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {expenses.slice(0, 5).map((t, i) => (
+                <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 12, borderBottom: i < 4 ? '1px solid var(--border-primary)' : 'none' }}>
+                  <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>0{i + 1}</span>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: '0.875rem', fontWeight: 500 }}>{t.description}</p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{formatDate(t.date)}</p>
+                  </div>
+                  <span className="mono" style={{ fontWeight: 600, fontSize: '0.875rem' }}>{formatCurrency(t.amount)}</span>
                 </div>
-                <span className="mono" style={{ fontWeight: 600, fontSize: '0.875rem' }}>{formatCurrency(t.amount)}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </GlowCard>
         </motion.div>
 
-        <motion.div variants={item} className="panel-card" style={{ padding: 24 }}>
-          <h3 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: 20 }}>Distribution</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {categorySpending.slice(0, 6).map((cat) => (
-              <div key={cat.category}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: '0.875rem' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-secondary)' }}>
-                    <CategoryIcon category={cat.category} className="w-4 h-4" />
-                    {cat.category}
-                  </span>
-                  <span className="mono" style={{ fontWeight: 600 }}>{formatCurrency(cat.amount)}</span>
+        <motion.div variants={item}>
+          <GlowCard style={{ padding: 24, display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <h3 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: 20 }}>Distribution</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {categorySpending.slice(0, 6).map((cat) => (
+                <div key={cat.category}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: '0.875rem' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-secondary)' }}>
+                      <CategoryIcon category={cat.category} className="w-4 h-4" />
+                      {cat.category}
+                    </span>
+                    <span className="mono" style={{ fontWeight: 600 }}>{formatCurrency(cat.amount)}</span>
+                  </div>
+                  <div style={{ width: '100%', height: 4, background: 'var(--border-primary)', borderRadius: 2 }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${cat.percentage}%` }}
+                      transition={{ duration: 0.8, ease: 'easeOut' }}
+                      style={{ height: '100%', background: categoryColors[cat.category] || 'var(--text-primary)', borderRadius: 2 }}
+                    />
+                  </div>
                 </div>
-                <div style={{ width: '100%', height: 4, background: 'var(--border-primary)', borderRadius: 2 }}>
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${cat.percentage}%` }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                    style={{ height: '100%', background: categoryColors[cat.category] || 'var(--text-primary)', borderRadius: 2 }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </GlowCard>
         </motion.div>
       </div>
     </motion.div>
