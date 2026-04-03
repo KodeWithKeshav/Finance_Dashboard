@@ -269,28 +269,35 @@ h1, h2, h3, h4, h5, h6 {
 /* Form Fields */
 .input-field {
   width: 100%;
-  background: transparent;
+  background: color-mix(in srgb, var(--bg-primary), transparent 40%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
   padding: 8px 12px;
   font-size: 0.875rem;
   color: var(--text-primary);
   font-family: inherit;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   outline: none;
+}
+.input-field:hover {
+  border-color: var(--border-secondary);
 }
 .input-field:focus {
   border-color: var(--text-secondary);
-  box-shadow: 0 0 0 1px var(--text-secondary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--text-secondary), transparent 80%);
 }
 .input-field::placeholder {
   color: var(--text-tertiary);
 }
 
-/* Select */
+/* Select — Glassmorphic */
 .select-field {
   appearance: none;
-  background: transparent;
+  background: color-mix(in srgb, var(--bg-primary), transparent 40%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
   padding: 8px 32px 8px 12px;
@@ -299,15 +306,26 @@ h1, h2, h3, h4, h5, h6 {
   font-family: inherit;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   outline: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%23a1a1aa'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9' /%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 16px;
 }
+.select-field:hover {
+  border-color: var(--border-secondary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 .select-field:focus {
   border-color: var(--text-secondary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--text-secondary), transparent 80%);
+}
+.select-field option {
+  background: #1a1a2e;
+  color: #e4e4e7;
+  padding: 8px 12px;
 }
 
 /* Modal */
@@ -322,9 +340,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 100;
 }
 .modal-content {
-  background: color-mix(in srgb, var(--bg-primary), transparent 40%);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
   padding: 32px;
@@ -332,7 +348,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.4);
 }
 
 /* Table strictly styled */

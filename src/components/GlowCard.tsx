@@ -29,6 +29,8 @@ export default function GlowCard({ children, className = '', style }: GlowCardPr
   const { theme } = useStore();
   const config = theme === 'dark' ? DARK_CONFIG : LIGHT_CONFIG;
 
+  const { height, ...innerStyle } = style || {};
+
   return (
     <BorderGlow
       backgroundColor={config.backgroundColor}
@@ -41,8 +43,9 @@ export default function GlowCard({ children, className = '', style }: GlowCardPr
       coneSpread={25}
       edgeSensitivity={30}
       className={className}
+      style={{ height }}
     >
-      <div style={style}>
+      <div style={{ flex: 1, ...innerStyle }}>
         {children}
       </div>
     </BorderGlow>

@@ -135,6 +135,7 @@
 .border-glow-inner {
   display: flex;
   flex-direction: column;
+  flex: 1;
   position: relative;
   overflow: visible;
   z-index: 1;

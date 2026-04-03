@@ -112,7 +112,7 @@ export default function Header() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 16px 56px;
+          padding: 16px 32px;
           margin-bottom: 16px;
           border-bottom: 1px solid var(--border-primary);
           background: color-mix(in srgb, var(--bg-primary), transparent 60%);
