@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/utils/helpers';
-import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ScaleIcon, ChartBarSquareIcon } from '@heroicons/react/24/outline';
+import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, ScaleIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import GlowCard from './GlowCard';
 
 interface StatCardsProps {
@@ -60,16 +60,16 @@ export default function StatCards({
     {
       label: 'Savings Rate',
       value: `${savingsRate}%`,
-      change: `${transactionCount} txns`,
-      changeType: 'neutral' as const,
+      change: savingsRate >= 20 ? 'On track' : 'Needs attention',
+      changeType: savingsRate >= 20 ? 'positive' as const : 'neutral' as const,
       icon: <ScaleIcon className="w-5 h-5" />,
     },
     {
-      label: 'Top Expense',
-      value: topCategory ? topCategory.category : 'N/A',
-      change: topCategory ? `${formatCurrency(topCategory.amount)} (${Math.round(topCategory.percentage)}%)` : '-',
+      label: 'Transactions',
+      value: transactionCount.toString(),
+      change: 'Active this period',
       changeType: 'neutral' as const,
-      icon: <ChartBarSquareIcon className="w-5 h-5" />,
+      icon: <CreditCardIcon className="w-5 h-5" />,
     },
   ];
 

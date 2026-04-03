@@ -16,6 +16,9 @@ import {
   BarChart,
   Bar,
   Sector,
+  ComposedChart,
+  Line,
+  LabelList,
 } from 'recharts';
 import { monthlyData, categoryColors } from '@/data/mockData';
 import { formatCurrency } from '@/utils/helpers';
@@ -297,6 +300,64 @@ export function SpendingBreakdownChart({ categorySpending }: ChartsProps) {
 }
 
 export function IncomeExpenseBarChart() {
+  const [viewMode, setViewMode] = useState<'All' | 'Income' | 'Expenses' | 'Net'>('All');
+
+  // Compute MoM % change and max values to position the label
+  const chartData = monthlyData.map((d, i, arr) => {
+    const prev = i > 0 ? arr[i - 1] : null;
+    let currentVal = 0;
+    let prevVal = 0;
+
+    if (viewMode === 'All' || viewMode === 'Net') {
+      currentVal = d.balance;
+      prevVal = prev ? prev.balance : 0;
+    } else if (viewMode === 'Income') {
+      currentVal = d.income;
+      prevVal = prev ? prev.income : 0;
+    } else if (viewMode === 'Expenses') {
+      currentVal = d.expense;
+      prevVal = prev ? prev.expense : 0;
+    }
+
+    let percentChange = 0;
+    if (prevVal !== 0) {
+      percentChange = ((currentVal - prevVal) / Math.abs(prevVal)) * 100;
+    }
+
+    const changeText = i === 0 ? '' : `${percentChange > 0 ? '+' : ''}${percentChange.toFixed(1)}%`;
+    const changeColor = percentChange > 0 ? 'var(--text-primary)' : 'var(--text-tertiary)';
+
+    return {
+      ...d,
+      net: d.balance,
+      percentChange: changeText,
+      changeColor: changeColor,
+      // determine the highest point for the label to sit above the bars
+      labelY: viewMode === 'All' 
+        ? Math.max(d.income, d.expense) + (Math.max(d.income, d.expense) * 0.05) 
+        : currentVal + (currentVal * 0.05)
+    };
+  });
+
+  const renderCustomLabel = (props: any) => {
+    const { x, y, value, index } = props;
+    const d = chartData[index];
+    if (!value || index === 0) return null;
+    const isPositive = value.startsWith('+');
+    return (
+      <text
+        x={x}
+        y={y - 10}
+        fill={isPositive ? '#10b981' : 'var(--text-tertiary)'}
+        fontSize={10}
+        fontWeight={600}
+        textAnchor="middle"
+      >
+        {value}
+      </text>
+    );
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -304,13 +365,35 @@ export function IncomeExpenseBarChart() {
       transition={{ delay: 0.2 }}
     >
      <GlowCard style={{ padding: '24px' }}>
-      <div style={{ marginBottom: 24 }}>
-        <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-          Monthly Comparison
-        </h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
+        <div>
+          <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+            Monthly Comparison
+          </h3>
+        </div>
+        <div style={{ display: 'flex', background: 'var(--bg-tertiary)', borderRadius: 6, padding: 2 }}>
+          {['All', 'Income', 'Expenses', 'Net'].map(mode => (
+            <button 
+              key={mode} 
+              onClick={() => setViewMode(mode as any)}
+              style={{ 
+                padding: '4px 12px', 
+                fontSize: '0.75rem', 
+                fontWeight: 500,
+                color: viewMode === mode ? 'var(--bg-primary)' : 'var(--text-tertiary)',
+                background: viewMode === mode ? 'var(--text-primary)' : 'transparent',
+                borderRadius: 4,
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}>
+              {mode}
+            </button>
+          ))}
+        </div>
       </div>
       <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }} barGap={2} barSize={12}>
+        <ComposedChart data={chartData} margin={{ top: 20, right: 10, left: -10, bottom: 0 }} barGap={2} barSize={12}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-primary)" vertical={false} />
           <XAxis
             dataKey="month"
@@ -327,9 +410,21 @@ export function IncomeExpenseBarChart() {
             dx={-10}
           />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--bg-tertiary)' }} />
-          <Bar dataKey="income" name="Income" fill="var(--text-primary)" radius={[2, 2, 0, 0]} />
-          <Bar dataKey="expense" name="Expenses" fill="var(--border-secondary)" radius={[2, 2, 0, 0]} />
-        </BarChart>
+          
+          {(viewMode === 'All' || viewMode === 'Income') && (
+            <Bar dataKey="income" name="Income" fill="var(--text-primary)" radius={[2, 2, 0, 0]} />
+          )}
+          {(viewMode === 'All' || viewMode === 'Expenses') && (
+            <Bar dataKey="expense" name="Expenses" fill="var(--border-secondary)" radius={[2, 2, 0, 0]} />
+          )}
+          {(viewMode === 'Net') && (
+            <Bar dataKey="net" name="Net" fill="#10b981" radius={[2, 2, 0, 0]} />
+          )}
+
+          <Line type="monotone" dataKey="labelY" stroke="none" isAnimationActive={false} dot={false}>
+            <LabelList dataKey="percentChange" content={renderCustomLabel} />
+          </Line>
+        </ComposedChart>
       </ResponsiveContainer>
      </GlowCard>
     </motion.div>

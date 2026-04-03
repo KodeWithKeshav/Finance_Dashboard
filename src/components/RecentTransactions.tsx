@@ -5,6 +5,8 @@ import { formatCurrency, formatDate, getRelativeDate } from '@/utils/helpers';
 import { Transaction } from '@/types';
 import { CategoryIcon } from './IconResolver';
 import GlowCard from './GlowCard';
+import { categoryColors } from '@/data/mockData';
+import { useStore } from '@/store/useStore';
 
 interface RecentTransactionsProps {
   transactions: Transaction[];
@@ -12,6 +14,8 @@ interface RecentTransactionsProps {
 
 export default function RecentTransactions({ transactions }: RecentTransactionsProps) {
   const recent = transactions.slice(0, 6);
+  const { setActivePage } = useStore();
+  const netTotal = recent.reduce((sum, t) => t.type === 'income' ? sum + t.amount : sum - t.amount, 0);
 
   return (
     <motion.div
@@ -24,6 +28,22 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
         <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>
           Recent Activity
         </h3>
+        <button 
+          onClick={() => setActivePage('transactions')}
+          style={{
+            fontSize: '0.75rem',
+            color: 'var(--text-secondary)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: 500,
+            transition: 'color 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}
+        >
+          View All →
+        </button>
       </div>
 
       {recent.length === 0 ? (
@@ -57,9 +77,22 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
                   justifyContent: 'center',
                   color: 'var(--text-secondary)',
                   flexShrink: 0,
+                  position: 'relative',
                 }}
               >
                 <CategoryIcon category={t.category} className="w-4 h-4" />
+                <span 
+                  style={{
+                    position: 'absolute',
+                    top: -4,
+                    right: -4,
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    backgroundColor: categoryColors[t.category] || 'var(--border-secondary)',
+                    border: '2px solid var(--bg-primary)'
+                  }}
+                />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p
@@ -91,6 +124,26 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
               </span>
             </motion.div>
           ))}
+          
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: '16px',
+            borderTop: '1px dashed var(--border-primary)',
+            marginTop: '8px'
+          }}>
+            <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              Net Total
+            </span>
+            <span className="mono" style={{
+              fontSize: '1rem',
+              fontWeight: 600,
+              color: netTotal >= 0 ? '#10b981' : 'var(--text-primary)'
+            }}>
+              {netTotal >= 0 ? '+' : '-'}{formatCurrency(Math.abs(netTotal))}
+            </span>
+          </div>
         </div>
       )}
      </GlowCard>
