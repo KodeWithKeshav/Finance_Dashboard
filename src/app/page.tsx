@@ -79,22 +79,23 @@ export default function Home() {
           height: '100vh', 
           zIndex: 0, 
           pointerEvents: 'none',
-          opacity: theme === 'dark' ? 0.35 : 0.25
+          opacity: theme === 'dark' ? 0.35 : 0.4,
+          display: 'block'
         }}
       >
         <LiquidEther
-          colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#E4E4E7', '#F4F4F5', '#D4D4D8']}
-          mouseForce={20}
-          cursorSize={80}
+          colors={theme === 'dark' ? ['#5227FF', '#FF9FFC', '#B19EEF'] : ['#f1f5f9', '#f8fafc', '#ffffff']}
+          mouseForce={theme === 'dark' ? 20 : 6}
+          cursorSize={theme === 'dark' ? 80 : 150}
           isViscous={true}
-          viscous={30}
+          viscous={theme === 'dark' ? 30 : 50}
           iterationsViscous={8}
           iterationsPoisson={8}
           resolution={0.15}
           isBounce={false}
           autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
+          autoSpeed={theme === 'dark' ? 0.5 : 0.2}
+          autoIntensity={theme === 'dark' ? 2.2 : 0.5}
           takeoverDuration={0.25}
           autoResumeDelay={3000}
           autoRampDuration={0.6}

@@ -18,11 +18,11 @@ const DARK_CONFIG = {
 };
 
 const LIGHT_CONFIG = {
-  backgroundColor: '#fafafa',
-  colors: ['#a78bfa', '#f9a8d4', '#67e8f9'],
-  glowColor: '270 50 55',
-  glowIntensity: 0.5,
-  fillOpacity: 0.15,
+  backgroundColor: '#ffffff',
+  colors: ['#e2e8f0', '#e2e8f0', '#e2e8f0'],
+  glowColor: '210 20 85',
+  glowIntensity: 0,
+  fillOpacity: 0,
 };
 
 export default function GlowCard({ children, className = '', style }: GlowCardProps) {

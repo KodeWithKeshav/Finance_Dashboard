@@ -13,6 +13,9 @@
   transform: translate3d(0, 0, 0.01px);
   display: grid;
   background: var(--card-bg, #060010);
+  backdrop-filter: var(--card-blur, none);
+  -webkit-backdrop-filter: var(--card-blur, none);
+  box-shadow: var(--card-shadow, none);
   overflow: visible;
 }
 

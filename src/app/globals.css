@@ -6,27 +6,32 @@
 @tailwind utilities;
 
 :root {
-  /* Ultra Clean Monochromatic Palette - Light */
-  --bg-primary: #ffffff;
-  --bg-secondary: #fafafa;
-  --bg-tertiary: #f4f4f5;
-  --border-primary: #e4e4e7;
-  --border-secondary: #d4d4d8;
-  --text-primary: #09090b;
-  --text-secondary: #52525b;
-  --text-tertiary: #a1a1aa;
+  /* Ultra Clean Professional Palette - Light */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
   
-  --accent-primary: #09090b; /* Stark black for emphasis */
-  --accent-primary-light: #27272a;
-  --accent-success: #16a34a;
-  --accent-success-light: #dcfce7;
-  --accent-danger: #dc2626;
-  --accent-danger-light: #fee2e2;
-  --accent-warning: #eab308;
+  --accent-primary: #0f172a; 
+  --accent-primary-light: #334155;
+  --accent-success: #059669;
+  --accent-success-light: #d1fae5;
+  --accent-danger: #e11d48;
+  --accent-danger-light: #ffe4e6;
+  --accent-warning: #d97706;
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+
+  /* Solid Professional styling for Light Mode */
+  --card-glass-bg: #ffffff;
+  --card-blur: none;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
   
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -70,6 +75,10 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+  --card-glass-bg: #0a0a0a;
+  --card-blur: none;
+  --card-shadow: none;
 }
 
 * {
