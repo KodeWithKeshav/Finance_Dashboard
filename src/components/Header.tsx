@@ -2,14 +2,15 @@
 
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
-import { SunIcon, MoonIcon, EyeIcon, ShieldCheckIcon, Squares2X2Icon, ListBulletIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import ShinyText from './ShinyText';
+import GooeyNav from './GooeyNav';
 
 const navItems = [
-  { id: 'dashboard' as const, label: 'Overview', icon: Squares2X2Icon },
-  { id: 'transactions' as const, label: 'Transactions', icon: ListBulletIcon },
-  { id: 'insights' as const, label: 'Analytics', icon: ChartBarIcon },
+  { id: 'dashboard' as const, label: 'Overview' },
+  { id: 'transactions' as const, label: 'Transactions' },
+  { id: 'insights' as const, label: 'Analytics' },
 ];
 
 export default function Header() {
@@ -19,6 +20,8 @@ export default function Header() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const activeNavIndex = navItems.findIndex(item => item.id === activePage);
 
   return (
     <header className="header">
@@ -35,35 +38,22 @@ export default function Header() {
           color="var(--text-tertiary)" 
           shineColor="var(--text-primary)" 
           spread={100}
-          className="brand-name mono" 
+          className="brand-name font-heading" 
         />
       </div>
 
-      {/* Main Navigation Pill in the Center */}
-      <nav className="header-nav">
-        {navItems.map((item) => {
-          const isActive = activePage === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActivePage(item.id)}
-              className={`nav-btn ${isActive ? 'active' : ''}`}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="header-nav-glow"
-                  className="nav-active-bg"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                />
-              )}
-              <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <item.icon style={{ width: 14, height: 14 }} strokeWidth={isActive ? 2.5 : 1.5} />
-                {item.label}
-              </span>
-            </button>
-          );
-        })}
-      </nav>
+      {/* GooeyNav Navigation */}
+      <GooeyNav
+        items={navItems.map(item => ({ label: item.label }))}
+        activeIndex={activeNavIndex >= 0 ? activeNavIndex : 0}
+        onItemClick={(index) => setActivePage(navItems[index].id)}
+        particleCount={15}
+        particleDistances={[90, 10]}
+        particleR={100}
+        animationTime={600}
+        timeVariance={300}
+        colors={[1, 2, 3, 1, 2, 3, 1, 4]}
+      />
 
       <div className="header-right">
         {/* Role Switcher */}
@@ -158,54 +148,6 @@ export default function Header() {
           color: var(--text-primary);
         }
 
-        .header-nav {
-          display: flex;
-          align-items: center;
-          padding: 4px;
-          background: color-mix(in srgb, var(--bg-secondary), transparent 40%);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid var(--border-primary);
-          border-radius: 100px;
-          gap: 4px;
-        }
-
-        .nav-btn {
-          position: relative;
-          padding: 6px 16px;
-          background: transparent;
-          border: none;
-          color: var(--text-tertiary);
-          font-family: inherit;
-          font-size: 0.75rem;
-          font-weight: 500;
-          line-height: 1;
-          letter-spacing: 0.02em;
-          border-radius: 100px;
-          cursor: pointer;
-          transition: color 0.15s ease;
-        }
-
-        .nav-btn:hover {
-          color: var(--text-secondary);
-        }
-
-        .nav-btn.active {
-          color: var(--text-primary);
-          font-weight: 600;
-        }
-
-        .nav-active-bg {
-          position: absolute;
-          inset: 0;
-          background: color-mix(in srgb, var(--bg-primary), transparent 30%);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border-radius: 100px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.05), border 1px solid var(--border-primary);
-          z-index: 1;
-        }
-
         .header-right {
           display: flex;
           align-items: center;
@@ -237,7 +179,7 @@ export default function Header() {
           font-weight: 500;
           cursor: pointer;
           transition: all 0.15s ease;
-          font-family: inherit;
+          font-family: 'Inter', sans-serif;
         }
 
         .role-btn.active {
@@ -291,7 +233,7 @@ export default function Header() {
 
         .eclipse-sky.dark .eclipse-sun {
           transform: scale(0.9);
-          background: #e2e8f0; /* turns paler like the moon */
+          background: #e2e8f0;
           box-shadow: 0 0 15px rgba(226, 232, 240, 0.4);
         }
 
@@ -300,7 +242,7 @@ export default function Header() {
           width: 20px;
           height: 20px;
           border-radius: 50%;
-          background: #0f172a; /* Exaxtly matches the dark night sky */
+          background: #0f172a;
           top: 11px;
           left: 11px;
           z-index: 2;
@@ -334,19 +276,6 @@ export default function Header() {
         @media (max-width: 900px) {
           .header-left .brand-name {
             display: none;
-          }
-          .header-nav {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            padding: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px var(--border-primary);
-            background: var(--bg-primary);
-          }
-          .nav-btn {
-            padding: 10px 20px;
           }
         }
       `}</style>

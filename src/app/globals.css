@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&f[]=clash-display@400,500,600,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -83,10 +84,17 @@ body {
   box-sizing: border-box;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: inherit;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* Global Heading Typography - Satoshi */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Satoshi', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 /* Scrollbar */
@@ -141,7 +149,16 @@ body {
 }
 
 .mono {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Clash Display', 'Inter', sans-serif;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+.font-heading {
+  font-family: 'Satoshi', 'Inter', sans-serif;
+}
+
+.font-display {
+  font-family: 'Clash Display', 'Inter', sans-serif;
 }
 
 /* Badges */

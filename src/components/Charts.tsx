@@ -95,7 +95,7 @@ export function BalanceTrendChart() {
             dy={10}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: 'var(--text-tertiary)', fontFamily: "'JetBrains Mono', monospace" }}
+            tick={{ fontSize: 11, fill: 'var(--text-tertiary)', fontFamily: "'Clash Display', sans-serif" }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`}
@@ -224,7 +224,7 @@ export function IncomeExpenseBarChart() {
             dy={10}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: 'var(--text-tertiary)', fontFamily: "'JetBrains Mono', monospace" }}
+            tick={{ fontSize: 11, fill: 'var(--text-tertiary)', fontFamily: "'Clash Display', sans-serif" }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`}
